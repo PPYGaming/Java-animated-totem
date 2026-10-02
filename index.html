@@ -44,7 +44,7 @@ body.hid *{animation-play-state:paused!important}
 #heroBtn:focus-visible{outline:2px solid var(--gold);outline-offset:4px}
 .float{width:100%;height:100%;animation:float 3.4s ease-in-out infinite;filter:drop-shadow(0 0 18px rgba(255,210,63,.65)) drop-shadow(0 0 40px rgba(255,138,0,.35))}
 @keyframes float{50%{transform:translateY(-10px)}}
-.float canvas{width:100%;height:100%;image-rendering:pixelated;display:block}
+.float canvas{width:100%;height:100%;image-rendering:pixelated;display:block;object-fit:contain}
 .float canvas.spin{animation:spin .8s cubic-bezier(.3,.7,.2,1)}
 @keyframes spin{0%{transform:rotateY(0) scale(1)}50%{transform:rotateY(180deg) scale(1.2)}100%{transform:rotateY(360deg) scale(1)}}
 h1{font-family:'Baloo 2',sans-serif;font-weight:800;font-size:clamp(1.8rem,6vw,2.6rem);line-height:1.12;margin:.2rem 0 .5rem;background:linear-gradient(135deg,#FFF3C4,var(--gold) 45%,var(--gold2) 75%,var(--amber));-webkit-background-clip:text;background-clip:text;-webkit-text-fill-color:transparent;filter:drop-shadow(0 0 18px rgba(255,178,39,.35))}
@@ -101,7 +101,7 @@ input[type=range]{width:100%;min-height:44px;accent-color:var(--gold)}
 .msg.warn{background:rgba(255,210,63,.1);border-color:var(--goldb);color:#FFE9A0}
 [hidden]{display:none!important}
 #strip{display:flex;gap:6px;overflow-x:auto;padding:.5rem 2px .8rem;scrollbar-width:thin}
-#strip img{flex:0 0 auto;width:48px;height:48px;image-rendering:pixelated;border-radius:8px;border:1.5px solid var(--gb);background:rgba(0,0,0,.3);opacity:0;transform:scale(.3);animation:pop .35s cubic-bezier(.2,1.6,.4,1) forwards}
+#strip img{flex:0 0 auto;width:48px;height:48px;object-fit:contain;image-rendering:pixelated;border-radius:8px;border:1.5px solid var(--gb);background:rgba(0,0,0,.3);opacity:0;transform:scale(.3);animation:pop .35s cubic-bezier(.2,1.6,.4,1) forwards}
 @keyframes pop{to{opacity:1;transform:none}}
 .ok{margin-top:.9rem;text-align:center;color:var(--gold);font-weight:800;font-family:'Baloo 2',sans-serif;text-shadow:0 0 14px rgba(255,210,63,.5)}
 .note{margin-top:1rem;font-size:.82rem;font-weight:600;color:var(--muted);line-height:1.5}
@@ -122,7 +122,6 @@ details ol{margin:.2rem 0 .8rem;padding-left:1.2rem;font-weight:600;font-size:.9
   <div id="flies"></div><div id="shade"></div>
 </div>
 <canvas id="fx" aria-hidden="true"></canvas><div id="flash" aria-hidden="true"></div>
-<button class="snd" id="snd" type="button" aria-pressed="false" aria-label="Sound off. Tap to turn the chime on">🔇</button>
 
 <main class="wrap">
   <header class="hero">
@@ -138,19 +137,10 @@ details ol{margin:.2rem 0 .8rem;padding-left:1.2rem;font-weight:600;font-size:.9
 
     <div class="step rise" style="--i:5"><div class="lab"><span class="num">2</span>Upload your GIF</div>
       <div class="drop" id="drop" tabindex="0" role="button" aria-label="Choose a GIF file. Drag and drop also works">
-        <div id="dzEmpty"><div class="dzi">🎞️</div><div class="dzt">Tap or drop a .gif here<span>Max 50 MB. Up to 64 frames are used.</span></div></div>
-        <div id="gifPrev" hidden><img id="gifImg" alt="Your GIF"><div class="meta" id="gifMeta"></div><button class="mini" id="swap" type="button">Choose another</button></div>
+        <div id="dzEmpty"><div class="dzi">🎞️</div><div class="dzt">Tap or drop a .gif here<span>Max 50 MB. Your GIF keeps its own shape.</span></div></div>
+        <div id="gifPrev" hidden><img id="gifImg" alt="Your GIF"><div class="meta" id="gifMeta"></div><button class="mini" id="swap" type="button">Change GIF</button></div>
       </div>
       <input id="file" type="file" accept="image/gif,.gif" hidden>
-      <div class="opts">
-        <div class="row"><span class="lab2">Texture size</span>
-          <label class="chip"><input type="radio" name="sz" value="16" checked><span>16x16</span></label>
-          <label class="chip"><input type="radio" name="sz" value="32"><span>32x32</span></label>
-          <label class="chip"><input type="radio" name="sz" value="64"><span>64x64</span></label></div>
-        <label class="chk"><input type="checkbox" id="fit"> Fit whole GIF (transparent padding) instead of center-crop</label>
-        <div><div class="row"><span class="lab2">Animation speed</span></div><input id="speed" type="range" min="0" max="2" step="1" value="1" aria-label="Animation speed"><div class="rl"><span>Slow</span><span>Normal</span><span>Fast</span></div></div>
-        <label class="chk"><input type="checkbox" id="interp"> Smooth blend between frames (interpolate)</label>
-      </div>
       <div id="framesBox" hidden><div class="meta" id="framesLabel" style="margin-top:.9rem"></div><div id="strip"></div></div>
     </div>
 
@@ -164,7 +154,7 @@ details ol{margin:.2rem 0 .8rem;padding-left:1.2rem;font-weight:600;font-size:.9
 
     <details class="rise" style="--i:7"><summary>📦 How to install on Java</summary>
       <ol><li>Open Minecraft Java, go to <b>Options > Resource Packs</b>.</li><li>Click <b>Open Pack Folder</b>.</li><li>Drop the downloaded .zip in (do not unzip it).</li><li>Move it to the right-hand list and click <b>Done</b>.</li></ol></details>
-    <p class="note rise" style="--i:8">Targets Java 1.21 and newer (pack formats 34 up to 107). Older versions may warn the pack is for another version. The TamilCrafters Studio credit is embedded in the pack files, so re-uploading it elsewhere carries the credit.</p>
+    <p class="note rise" style="--i:8">Works on Java 1.20 and newer, including 1.21.x and 26.x. The TamilCrafters Studio credit is embedded in the pack files, so re-uploading it elsewhere carries the credit.</p>
   </section>
   <footer class="foot rise" style="--i:9">Made with love by <b>TamilCrafters Studio</b><br>Everything runs right in your browser. Nothing is uploaded anywhere.</footer>
 </main>
@@ -195,8 +185,8 @@ https://github.com/nodeca/pako/blob/main/LICENSE
 /* ===== CONFIG ===== */
 var BG_IMAGE_URL = "";   /* <-- put a URL or relative path like "bg.jpg" here to replace the pixel night scene */
 var OFFICIAL_LINK = "";  /* <-- optional creator link, written into CREDITS.txt when filled */
-var BRAND="TamilCrafters Studio", TOOL="Java Animated Totem Pack Maker", MAX_FRAMES=64, MAX_BYTES=50*1024*1024;
-var PACK_MIN=34, PACK_MAX=107;
+var BRAND="TamilCrafters Studio", TOOL="Java Animated Totem Pack Maker", MAX_FRAMES=1800, MAX_DIM=320, MAX_STRIP=16384, FRAMETIME=2, MAX_BYTES=50*1024*1024;
+var PACK_MIN=15, PACK_MAX=99;  /* resource pack formats: wide range so it loads on old and new Java */
 var $=function(i){return document.getElementById(i)};
 var RM=window.matchMedia&&matchMedia("(prefers-reduced-motion: reduce)").matches;
 
@@ -264,14 +254,9 @@ var FX=(function(){
 addEventListener("pointerdown",function(e){if(typeof e.clientX==="number")FX.burst(e.clientX,e.clientY);
   var b=e.target.closest&&e.target.closest(".pill,.mini");if(b&&!b.disabled){if(navigator.vibrate)navigator.vibrate(15);if(!RM){var r=b.getBoundingClientRect(),s=Math.max(r.width,r.height)*2,d=document.createElement("span");d.className="rip";d.style.cssText="width:"+s+"px;height:"+s+"px;left:"+(e.clientX-r.left-s/2)+"px;top:"+(e.clientY-r.top-s/2)+"px";b.appendChild(d);setTimeout(function(){d.remove()},600)}}},{passive:true});
 $("heroBtn").addEventListener("click",function(){var cv=$("live").hidden?$("hero"):$("live");cv.classList.remove("spin");void cv.offsetWidth;cv.classList.add("spin");var r=$("heroBtn").getBoundingClientRect();FX.burst(r.left+r.width/2,r.top+r.height/2,22)});
-/* optional chime */
-var sndOn=false,AC=null;
-$("snd").addEventListener("click",function(){sndOn=!sndOn;this.textContent=sndOn?"🔊":"🔇";this.setAttribute("aria-pressed",sndOn);this.setAttribute("aria-label",sndOn?"Sound on. Tap to turn off":"Sound off. Tap to turn the chime on")});
-function chime(){if(!sndOn)return;try{AC=AC||new (window.AudioContext||window.webkitAudioContext)();[659,880,1319].forEach(function(f,i){var o=AC.createOscillator(),g=AC.createGain(),t=AC.currentTime+i*.11;o.type="triangle";o.frequency.value=f;g.gain.setValueAtTime(.001,t);g.gain.exponentialRampToValueAtTime(.18,t+.02);g.gain.exponentialRampToValueAtTime(.001,t+.5);o.connect(g);g.connect(AC.destination);o.start(t);o.stop(t+.55)})}catch(e){}}
-
 /* ===== helpers (same structure as the Bedrock tool) ===== */
 var st={comp:null,frames:[],ticks:1,zip:null,name:""};
-function sanitizeDisplay(s){return (s||"").trim().replace(/[\r\n"\\]/g,"").slice(0,40)}
+function sanitizeDisplay(s){return (s||"").trim().replace(/[\r\n"\\\u00A7]/g,"").slice(0,40)}
 function toFileBase(s){s=(s||"").trim().replace(/[^a-zA-Z0-9 _-]/g,"").replace(/\s+/g,"");return s?s.slice(0,40):"TamilcraftersJavaTotemPack"}
 function fmt(b){return b<1048576?(b/1024).toFixed(1)+" KB":(b/1048576).toFixed(1)+" MB"}
 function compositeFrames(gif,raw){
@@ -285,11 +270,10 @@ function compositeFrames(gif,raw){
   return{canvases:out,avgDelay:tc?td/tc:100,w:w,h:h};
 }
 function sampleFrames(a,max){if(a.length<=max)return a.slice();var s=a.length/max,r=[];for(var i=0;i<max;i++)r.push(a[Math.floor(i*s)]);return r}
-function fitSquare(cv,S,contain){
-  var o=document.createElement("canvas");o.width=o.height=S;var c=o.getContext("2d");c.imageSmoothingEnabled=false;var w=cv.width,h=cv.height;
-  if(contain){var k=S/Math.max(w,h),dw=Math.max(1,Math.round(w*k)),dh=Math.max(1,Math.round(h*k));c.drawImage(cv,0,0,w,h,Math.floor((S-dw)/2),Math.floor((S-dh)/2),dw,dh)}
-  else{var s=Math.min(w,h);c.drawImage(cv,(w-s)/2,(h-s)/2,s,s,0,0,S,S)}
-  return o;
+function fitFrame(cv,fw,fh){
+  var o=document.createElement("canvas");o.width=fw;o.height=fh;var c=o.getContext("2d");
+  if(fw!==cv.width||fh!==cv.height){c.imageSmoothingEnabled=true;c.imageSmoothingQuality="high"}
+  c.drawImage(cv,0,0,cv.width,cv.height,0,0,fw,fh);return o;
 }
 function canvasToPngBlob(cv){return new Promise(function(res,rej){cv.toBlob(function(b){b?res(b):rej(new Error("Could not encode a PNG."))},"image/png")})}
 
@@ -300,19 +284,22 @@ function clearMsg(){$("msg").hidden=true}
 function lock(){st.zip=null;var d=$("dl");d.disabled=true;d.classList.remove("ready");d.textContent="🔒 Download (build the pack first)";$("ok").hidden=true}
 var liveT=0;
 function startLive(){
-  clearTimeout(liveT);var cv=$("live");if(!st.frames.length)return;cv.width=cv.height=st.frames[0].width;cv.hidden=false;$("hero").hidden=true;
-  var c=cv.getContext("2d"),i=0,ms=Math.max(50,st.ticks*50);(function tick(){if(!document.hidden){c.clearRect(0,0,cv.width,cv.height);c.drawImage(st.frames[i%st.frames.length],0,0);i++}liveT=setTimeout(tick,ms)})();
+  clearTimeout(liveT);var cv=$("live");if(!st.frames.length)return;cv.width=st.fw;cv.height=st.fh;cv.hidden=false;$("hero").hidden=true;
+  var c=cv.getContext("2d"),i=0,ms=FRAMETIME*50;(function tick(){if(!document.hidden){c.clearRect(0,0,cv.width,cv.height);c.drawImage(st.frames[i%st.frames.length],0,0);i++}liveT=setTimeout(tick,ms)})();
 }
-function speedMul(){return[1.6,1,.6][+$("speed").value]}
+/* automatic sizing: frames as-is, only scaled down if the longest side is over 320 px; strip stays <= 16384 px tall */
 function refit(){
-  if(!st.comp)return;var S=+document.querySelector('input[name=sz]:checked').value,cm=st.comp,ch=sampleFrames(cm.canvases,MAX_FRAMES);
-  st.frames=ch.map(function(c){return fitSquare(c,S,$("fit").checked)});
-  var per=cm.avgDelay*(cm.canvases.length/ch.length);st.ticks=Math.max(1,Math.round(per/50*speedMul()));
+  var cm=st.comp,n0=cm.canvases.length,fw=cm.w,fh=cm.h,big=Math.max(cm.w,cm.h);
+  if(big>MAX_DIM){var k=MAX_DIM/big;fw=Math.max(1,Math.round(cm.w*k));fh=Math.max(1,Math.round(cm.h*k));if(cm.w>=cm.h)fw=MAX_DIM;else fh=MAX_DIM}
+  var target=Math.min(n0,MAX_FRAMES,Math.floor(MAX_STRIP/fh)),ch=sampleFrames(cm.canvases,target);
+  if(n0<2)showMsg("Heads up: this GIF only has 1 frame, so the totem won't animate. Use an animated GIF for the glowing effect. 🔥","warn");
+  else if(ch.length<n0)showMsg("Big GIF! It has "+n0+" frames, but Java stacks them in one image (max "+MAX_STRIP+" px tall), so "+ch.length+" evenly spaced frames are kept. 📦","warn");
+  else if(ch.length>300)showMsg("Big GIF! Keeping all "+ch.length+" frames — the pack will be larger and may take a bit longer to generate and load in-game. 📦⏳","warn");
+  st.frames=ch.map(function(c){return fitFrame(c,fw,fh)});st.fw=fw;st.fh=fh;
   var strip=$("strip");strip.innerHTML="";st.frames.forEach(function(f,i){var im=new Image();im.alt="";im.src=f.toDataURL("image/png");im.style.animationDelay=Math.min(i*30,900)+"ms";strip.appendChild(im)});
-  $("framesLabel").textContent=st.frames.length+" frame"+(st.frames.length===1?"":"s")+" at "+S+"x"+S+" | frametime "+st.ticks+" tick"+(st.ticks===1?"":"s");
+  $("framesLabel").textContent=st.frames.length+" frame"+(st.frames.length===1?"":"s")+" captured 🎞️ | "+fw+"x"+fh;
   $("framesBox").hidden=false;startLive();lock();
 }
-["change"].forEach(function(ev){document.querySelectorAll('input[name=sz],#fit,#speed,#interp').forEach(function(el){el.addEventListener(ev,function(){if(el.id==="interp"){lock()}else refit()})})});
 
 /* ===== file intake ===== */
 var drop=$("drop"),fileIn=$("file");
@@ -333,42 +320,46 @@ function onFile(f){
     if(!raw.length)throw new Error("This GIF has no readable frames. Please try a different file.");
     if(gif.lsd.width*gif.lsd.height*raw.length>400e6)throw new Error("This GIF is too huge to process on this device. Try one with a smaller size or fewer frames.");
     setProgress(60,"Stitching frames together 🧵");st.comp=compositeFrames(gif,raw);
-    if(raw.length<2)showMsg("Heads up: this GIF has only 1 frame, so the totem won't animate.","warn");
-    else if(raw.length>MAX_FRAMES)showMsg("This GIF has "+raw.length+" frames. Sampling down to "+MAX_FRAMES+" so the texture stays sane.","warn");
     var u=URL.createObjectURL(f);$("gifImg").src=u;$("gifMeta").textContent=f.name.slice(0,30)+" | "+st.comp.w+"x"+st.comp.h+" | "+fmt(f.size);$("dzEmpty").hidden=true;$("gifPrev").hidden=false;
     refit();$("gen").disabled=false;setProgress(100,"GIF ready. Hit Generate! ✨");
   }).catch(function(err){st.comp=null;$("gen").disabled=true;$("bar").hidden=true;$("ptext").textContent="";showMsg(err&&err.message?err.message:"Could not decode this GIF.","error")});
 }
 
 /* ===== build the pack ===== */
+/* item model: display transforms for hand and ground (written from scratch, untested in-game). item/generated is always 16 units wide, whatever the texture resolution. */
+function disp3(n,r,tr,s,last){return"\t\t\""+n+"\": {\n\t\t\t\"rotation\": ["+r+"],\n\t\t\t\"translation\": ["+tr+"],\n\t\t\t\"scale\": ["+s+"]\n\t\t}"+(last?"":",")}
+var MODEL=["{","\t\"credit\": \""+BRAND+"\",","\t\"parent\": \"item/generated\",","\t\"textures\": {","\t\t\"layer0\": \"item/totem_of_undying\"","\t},","\t\"display\": {",
+  disp3("thirdperson_righthand","0, 0, 0","0, 3, 1","0.5, 0.5, 0.5"),disp3("thirdperson_lefthand","0, 0, 0","0, 3, 1","0.5, 0.5, 0.5"),
+  disp3("firstperson_righthand","10, -90, 25","1.13, 3.2, 1.13","0.5, 0.5, 0.5"),disp3("firstperson_lefthand","10, 90, -25","1.13, 3.2, 1.13","0.5, 0.5, 0.5"),
+  disp3("ground","0, 0, 0","0, 2, 0","0.5, 0.5, 0.5",true),"\t}","}"].join("\n")+"\n";
 function rid(){var a=new Uint8Array(12),s="";(window.crypto||{getRandomValues:function(x){for(var i=0;i<x.length;i++)x[i]=Math.random()*256}}).getRandomValues(a);var al="abcdefghijklmnopqrstuvwxyz0123456789";for(var i=0;i<12;i++)s+=al[a[i]%36];return s}
 var GL={T:["11111","00100","00100","00100","00100"],C:["01111","10000","10000","10000","01111"]};
 function packIcon(first){
-  var o=document.createElement("canvas");o.width=o.height=64;var c=o.getContext("2d");c.imageSmoothingEnabled=false;c.drawImage(first,0,0,first.width,first.height,0,0,64,64);
+  var o=document.createElement("canvas");o.width=o.height=64;var c=o.getContext("2d");c.imageSmoothingEnabled=false;var sq=Math.min(first.width,first.height);c.drawImage(first,(first.width-sq)/2,(first.height-sq)/2,sq,sq,0,0,64,64);
   c.fillStyle="#0B1F1A";c.fillRect(37,49,26,14);c.fillStyle="#FFD23F";c.fillRect(37,49,26,1);c.fillRect(37,62,26,1);c.fillRect(37,49,1,14);c.fillRect(62,49,1,14);
   "TC".split("").forEach(function(ch,k){GL[ch].forEach(function(row,y){for(var x=0;x<5;x++)if(row[x]==="1")c.fillRect(39+k*12+x*2,51+y*2,2,2)})});
   return o;
 }
 $("gen").addEventListener("click",function(){
   if(!st.frames.length)return;clearMsg();lock();var g=$("gen");g.disabled=true;
-  var n=st.frames.length,S=st.frames[0].width,disp=sanitizeDisplay($("pname").value)||"Animated Totem",base=toFileBase($("pname").value),id=rid();
+  var n=st.frames.length,fw=st.fw,fh=st.fh,disp=sanitizeDisplay($("pname").value)||"Animated Totem",base=toFileBase($("pname").value),id=rid();
   setProgress(15,"Stacking frames 🧱");
-  var tall=document.createElement("canvas");tall.width=S;tall.height=S*n;var tc=tall.getContext("2d");st.frames.forEach(function(f,i){tc.drawImage(f,0,i*S)});
+  var tall=document.createElement("canvas");tall.width=fw;tall.height=fh*n;var tc=tall.getContext("2d");st.frames.forEach(function(f,i){tc.drawImage(f,0,i*fh)});
   canvasToPngBlob(tall).then(function(tallBlob){
     setProgress(45,"Painting the pack icon 🎨");return canvasToPngBlob(packIcon(st.frames[0])).then(function(iconBlob){return[tallBlob,iconBlob]})
   }).then(function(b){
     setProgress(65,"Writing the recipe files 📝");
-    var anim={frametime:st.ticks};if($("interp").checked)anim.interpolate=true;
-    var line1="Animated Totem"+(/tamilcrafters/i.test(disp)?"":" | "+BRAND);
-    var mc={pack:{description:[{text:line1+"\n",color:"white"},{text:"by "+BRAND,color:"gold"}],pack_format:PACK_MIN,supported_formats:[PACK_MIN,PACK_MAX],min_format:PACK_MIN,max_format:PACK_MAX}};
+    var anim={frametime:FRAMETIME};if(fw!==fh){anim.width=fw;anim.height=fh}anim.frames=[];for(var q=0;q<n;q++)anim.frames.push(q);
+    var line2="\u25A0 "+(/tamilcrafters/i.test(disp)?"Animated Totem":disp);
+    var mcs=JSON.stringify({pack:{pack_format:PACK_MIN,supported_formats:[PACK_MIN,PACK_MAX],min_format:PACK_MIN,max_format:PACK_MAX,description:"\u00A76\u25A0 by "+BRAND+"\u00A7r\n"+line2}},null,2).replace(/[^\x00-\x7F]/g,function(ch){return"\\u"+("0000"+ch.charCodeAt(0).toString(16)).slice(-4)});
     var iso=new Date().toISOString();
     var credits=["Pack name: "+disp,"Created with the "+TOOL+" by "+BRAND,"(c) 2026 "+BRAND+". All rights reserved. Do not re-upload, redistribute or claim this pack as your own without permission from the creator."];
     if(OFFICIAL_LINK)credits.push("Official link: "+OFFICIAL_LINK);
     var z=new JSZip();
-    z.file("pack.mcmeta",JSON.stringify(mc,null,2));z.file("pack.png",b[1]);z.file("CREDITS.txt",credits.join("\r\n")+"\r\n");
+    z.file("pack.mcmeta",mcs);z.file("assets/minecraft/models/item/totem_of_undying.json",MODEL);z.file("pack.png",b[1]);z.file("CREDITS.txt",credits.join("\r\n")+"\r\n");
     z.file("assets/minecraft/tamilcrafters_studio.json",JSON.stringify({made_by:BRAND,tool:TOOL,generated:iso,pack:disp,id:id}));
     z.file("assets/minecraft/textures/item/totem_of_undying.png",b[0]);
-    z.file("assets/minecraft/textures/item/totem_of_undying.png.mcmeta",JSON.stringify({animation:anim},null,2));
+    z.file("assets/minecraft/textures/item/totem_of_undying.png.mcmeta",JSON.stringify({animation:anim}));
     return z.generateAsync({type:"blob",compression:"DEFLATE",compressionOptions:{level:6},comment:BRAND+" | "+id},function(m){setProgress(70+Math.round(m.percent*.28),"Zipping the pack 📦 ("+Math.round(m.percent)+"%)")});
   }).then(function(blob){st.zip=blob;st.name=base+".zip";setProgress(100,"Done! Your totem is glowing ✨");success()})
   .catch(function(e){$("bar").hidden=true;showMsg("Could not build the pack: "+(e&&e.message||"unknown error"),"error")})
@@ -377,7 +368,7 @@ $("gen").addEventListener("click",function(){
 function success(){
   var d=$("dl");d.disabled=false;d.classList.add("ready");d.textContent="⬇️ Download pack (.zip)";$("ok").hidden=false;
   if(!RM){var f=$("flash");f.classList.remove("go");void f.offsetWidth;f.classList.add("go");FX.burst(innerWidth/2,innerHeight/2,60);FX.confetti();setTimeout(function(){FX.burst(innerWidth/2,innerHeight*.35,40)},250)}
-  var cv=$("live");cv.classList.remove("spin");void cv.offsetWidth;cv.classList.add("spin");chime();
+  var cv=$("live");cv.classList.remove("spin");void cv.offsetWidth;cv.classList.add("spin");
   if(navigator.vibrate)navigator.vibrate([30,40,30]);
 }
 $("dl").addEventListener("click",function(){
@@ -386,4 +377,4 @@ $("dl").addEventListener("click",function(){
 })();
 </script>
 </body>
-  </html>
+              </html>
