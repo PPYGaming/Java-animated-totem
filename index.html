@@ -185,7 +185,7 @@ https://github.com/nodeca/pako/blob/main/LICENSE
 /* ===== CONFIG ===== */
 var BG_IMAGE_URL = "";   /* <-- put a URL or relative path like "bg.jpg" here to replace the pixel night scene */
 var OFFICIAL_LINK = "";  /* <-- optional creator link, written into CREDITS.txt when filled */
-var BRAND="TamilCrafters Studio", TOOL="Java Animated Totem Pack Maker", MAX_FRAMES=1800, MAX_DIM=320, MAX_STRIP=16384, FRAMETIME=2, MAX_BYTES=50*1024*1024;
+var BRAND="TamilCrafters Studio", TOOL="Java Animated Totem Pack Maker", MAX_FRAMES=1800, MAX_DIM=320, MAX_STRIP=32768, MAX_BYTES=50*1024*1024;
 var PACK_MIN=15, PACK_MAX=99;  /* resource pack formats: wide range so it loads on old and new Java */
 var $=function(i){return document.getElementById(i)};
 var RM=window.matchMedia&&matchMedia("(prefers-reduced-motion: reduce)").matches;
@@ -261,15 +261,16 @@ function toFileBase(s){s=(s||"").trim().replace(/[^a-zA-Z0-9 _-]/g,"").replace(/
 function fmt(b){return b<1048576?(b/1024).toFixed(1)+" KB":(b/1048576).toFixed(1)+" MB"}
 function compositeFrames(gif,raw){
   var w=gif.lsd.width,h=gif.lsd.height,main=document.createElement("canvas");main.width=w;main.height=h;var m=main.getContext("2d");
-  var tmp=document.createElement("canvas"),t=tmp.getContext("2d"),prev=null,out=[],td=0,tc=0;
+  var tmp=document.createElement("canvas"),t=tmp.getContext("2d"),prev=null,out=[],td=0,tc=0,dls=[];
   for(var i=0;i<raw.length;i++){var f=raw[i];tmp.width=f.dims.width;tmp.height=f.dims.height;var id=t.createImageData(f.dims.width,f.dims.height);id.data.set(f.patch);t.putImageData(id,0,0);
     if(f.disposalType===3&&prev===null)prev=m.getImageData(0,0,w,h);
     m.drawImage(tmp,f.dims.left,f.dims.top);var o=document.createElement("canvas");o.width=w;o.height=h;o.getContext("2d").drawImage(main,0,0);out.push(o);
     if(f.disposalType===2)m.clearRect(f.dims.left,f.dims.top,f.dims.width,f.dims.height);else if(f.disposalType===3&&prev){m.putImageData(prev,0,0);prev=null}
-    if(f.delay){td+=f.delay;tc++}}
-  return{canvases:out,avgDelay:tc?td/tc:100,w:w,h:h};
+    if(f.delay){td+=f.delay;tc++}dls.push(f.delay>10?f.delay:100)}
+  return{canvases:out,delays:dls,avgDelay:tc?td/tc:100,w:w,h:h};
 }
 function sampleFrames(a,max){if(a.length<=max)return a.slice();var s=a.length/max,r=[];for(var i=0;i<max;i++)r.push(a[Math.floor(i*s)]);return r}
+function sampleIdx(n,max){var r=[],i;if(n<=max){for(i=0;i<n;i++)r.push(i);return r}var s=n/max;for(i=0;i<max;i++)r.push(Math.floor(i*s));return r}
 function fitFrame(cv,fw,fh){
   var o=document.createElement("canvas");o.width=fw;o.height=fh;var c=o.getContext("2d");
   if(fw!==cv.width||fh!==cv.height){c.imageSmoothingEnabled=true;c.imageSmoothingQuality="high"}
@@ -285,19 +286,24 @@ function lock(){st.zip=null;var d=$("dl");d.disabled=true;d.classList.remove("re
 var liveT=0;
 function startLive(){
   clearTimeout(liveT);var cv=$("live");if(!st.frames.length)return;cv.width=st.fw;cv.height=st.fh;cv.hidden=false;$("hero").hidden=true;
-  var c=cv.getContext("2d"),i=0,ms=FRAMETIME*50;(function tick(){if(!document.hidden){c.clearRect(0,0,cv.width,cv.height);c.drawImage(st.frames[i%st.frames.length],0,0);i++}liveT=setTimeout(tick,ms)})();
+  var c=cv.getContext("2d"),i=0;(function tick(){var k=i%st.frames.length;if(!document.hidden){c.clearRect(0,0,cv.width,cv.height);c.drawImage(st.frames[k],0,0)}i++;liveT=setTimeout(tick,st.ticks[k]*50)})();
 }
-/* automatic sizing: frames as-is, only scaled down if the longest side is over 320 px; strip stays <= 16384 px tall */
+/* automatic sizing: frames as-is, only scaled down if the longest side is over 320 px; strip stays <= 32768 px tall */
 function refit(){
-  var cm=st.comp,n0=cm.canvases.length,fw=cm.w,fh=cm.h,big=Math.max(cm.w,cm.h);
-  if(big>MAX_DIM){var k=MAX_DIM/big;fw=Math.max(1,Math.round(cm.w*k));fh=Math.max(1,Math.round(cm.h*k));if(cm.w>=cm.h)fw=MAX_DIM;else fh=MAX_DIM}
-  var target=Math.min(n0,MAX_FRAMES,Math.floor(MAX_STRIP/fh)),ch=sampleFrames(cm.canvases,target);
+  var cm=st.comp,n0=cm.canvases.length,fw=cm.w,fh=cm.h,big=Math.max(cm.w,cm.h),k,i,j;
+  if(big>MAX_DIM){k=MAX_DIM/big;fw=Math.max(1,Math.round(cm.w*k));fh=Math.max(1,Math.round(cm.h*k));if(cm.w>=cm.h)fw=MAX_DIM;else fh=MAX_DIM}
+  var idx=sampleIdx(n0,Math.min(MAX_FRAMES,Math.floor(MAX_STRIP/fh))),n=idx.length;
+  /* per-frame time: a kept frame also carries the time of the frames dropped after it, so speed is preserved */
+  var acc=0,used=0,total=0;st.ticks=[];
+  for(k=0;k<n;k++){var end=k+1<n?idx[k+1]:n0,ms=0;for(j=idx[k];j<end;j++)ms+=cm.delays[j];acc+=ms;
+    var tk=Math.max(1,Math.round(acc/50)-used);used+=tk;total+=tk;st.ticks.push(tk)}
+  st.fallback=Math.max(1,Math.round(total/n));st.sampled=n<n0;
   if(n0<2)showMsg("Heads up: this GIF only has 1 frame, so the totem won't animate. Use an animated GIF for the glowing effect. 🔥","warn");
-  else if(ch.length<n0)showMsg("Big GIF! It has "+n0+" frames, but Java stacks them in one image (max "+MAX_STRIP+" px tall), so "+ch.length+" evenly spaced frames are kept. 📦","warn");
-  else if(ch.length>300)showMsg("Big GIF! Keeping all "+ch.length+" frames — the pack will be larger and may take a bit longer to generate and load in-game. 📦⏳","warn");
-  st.frames=ch.map(function(c){return fitFrame(c,fw,fh)});st.fw=fw;st.fh=fh;
+  else if(st.sampled)showMsg("Big GIF! It has "+n0+" frames, but Java stacks them in one image (max "+MAX_STRIP+" px tall), so "+n+" evenly spaced frames are kept. The speed stays the same. 📦","warn");
+  else if(n>300)showMsg("Big GIF! Keeping all "+n+" frames — the pack will be larger and may take a bit longer to generate and load in-game. 📦⏳","warn");
+  st.frames=idx.map(function(i){return fitFrame(cm.canvases[i],fw,fh)});st.fw=fw;st.fh=fh;
   var strip=$("strip");strip.innerHTML="";st.frames.forEach(function(f,i){var im=new Image();im.alt="";im.src=f.toDataURL("image/png");im.style.animationDelay=Math.min(i*30,900)+"ms";strip.appendChild(im)});
-  $("framesLabel").textContent=st.frames.length+" frame"+(st.frames.length===1?"":"s")+" captured 🎞️ | "+fw+"x"+fh;
+  $("framesLabel").textContent=n+" frame"+(n===1?"":"s")+" captured 🎞️ | "+fw+"x"+fh+" | ~"+(n/(total*.05)).toFixed(1)+" fps"+(st.sampled?" | sampled from "+n0+" frames":"");
   $("framesBox").hidden=false;startLive();lock();
 }
 
@@ -321,17 +327,22 @@ function onFile(f){
     if(gif.lsd.width*gif.lsd.height*raw.length>400e6)throw new Error("This GIF is too huge to process on this device. Try one with a smaller size or fewer frames.");
     setProgress(60,"Stitching frames together 🧵");st.comp=compositeFrames(gif,raw);
     var u=URL.createObjectURL(f);$("gifImg").src=u;$("gifMeta").textContent=f.name.slice(0,30)+" | "+st.comp.w+"x"+st.comp.h+" | "+fmt(f.size);$("dzEmpty").hidden=true;$("gifPrev").hidden=false;
-    refit();$("gen").disabled=false;setProgress(100,"GIF ready. Hit Generate! ✨");
+    refit();$("gen").disabled=false;setProgress(100,st.sampled?"GIF ready (frames were evenly sampled, speed kept). Hit Generate! ✨":"GIF ready. Hit Generate! ✨");
   }).catch(function(err){st.comp=null;$("gen").disabled=true;$("bar").hidden=true;$("ptext").textContent="";showMsg(err&&err.message?err.message:"Could not decode this GIF.","error")});
 }
 
 /* ===== build the pack ===== */
-/* item model: display transforms for hand and ground (written from scratch, untested in-game). item/generated is always 16 units wide, whatever the texture resolution. */
-function disp3(n,r,tr,s,last){return"\t\t\""+n+"\": {\n\t\t\t\"rotation\": ["+r+"],\n\t\t\t\"translation\": ["+tr+"],\n\t\t\t\"scale\": ["+s+"]\n\t\t}"+(last?"":",")}
-var MODEL=["{","\t\"credit\": \""+BRAND+"\",","\t\"parent\": \"item/generated\",","\t\"textures\": {","\t\t\"layer0\": \"item/totem_of_undying\"","\t},","\t\"display\": {",
-  disp3("thirdperson_righthand","0, 0, 0","0, 3, 1","0.5, 0.5, 0.5"),disp3("thirdperson_lefthand","0, 0, 0","0, 3, 1","0.5, 0.5, 0.5"),
-  disp3("firstperson_righthand","10, -90, 25","1.13, 3.2, 1.13","0.5, 0.5, 0.5"),disp3("firstperson_lefthand","10, 90, -25","1.13, 3.2, 1.13","0.5, 0.5, 0.5"),
-  disp3("ground","0, 0, 0","0, 2, 0","0.5, 0.5, 0.5",true),"\t}","}"].join("\n")+"\n";
+/* item model: ONE flat double-sided plane, no extruded side faces (so no edge stripes). Values written from scratch, untested in-game. */
+function makeModel(fw,fh){
+  var a=fw/fh,x0=0,x1=16,y0=0,y1=16,r=function(v){return Math.round(v*1000)/1000};
+  if(a>1){y0=8-8/a;y1=8+8/a}else if(a<1){x0=8-8*a;x1=8+8*a}   /* keep the GIF's aspect ratio */
+  var face={uv:[0,0,16,16],texture:"#layer0"},hand=function(rot,tr,s){return{rotation:rot,translation:tr,scale:[s,s,s]}};
+  var m={credit:BRAND,gui_light:"front",textures:{layer0:"item/totem_of_undying",particle:"item/totem_of_undying"},
+    elements:[{from:[r(x0),r(y0),7.99],to:[r(x1),r(y1),8.01],faces:{north:face,south:face}}],
+    display:{gui:hand([0,0,0],[0,0,0],1),firstperson_righthand:hand([10,-90,25],[1.13,3.2,1.13],.5),firstperson_lefthand:hand([10,90,-25],[1.13,3.2,1.13],.5),
+      thirdperson_righthand:hand([0,0,0],[0,3,1],.5),thirdperson_lefthand:hand([0,0,0],[0,3,1],.5),fixed:hand([0,180,0],[0,0,0],1),ground:hand([0,0,0],[0,2,0],.5)}};
+  return JSON.stringify(m,null,"\t").replace(/\[\s*([^\[\]{}"]*?)\s*\]/g,function(s,x){return"["+x.replace(/\s*\n\s*/g," ")+"]"})+"\n";
+}
 function rid(){var a=new Uint8Array(12),s="";(window.crypto||{getRandomValues:function(x){for(var i=0;i<x.length;i++)x[i]=Math.random()*256}}).getRandomValues(a);var al="abcdefghijklmnopqrstuvwxyz0123456789";for(var i=0;i<12;i++)s+=al[a[i]%36];return s}
 var GL={T:["11111","00100","00100","00100","00100"],C:["01111","10000","10000","10000","01111"]};
 function packIcon(first){
@@ -349,14 +360,14 @@ $("gen").addEventListener("click",function(){
     setProgress(45,"Painting the pack icon 🎨");return canvasToPngBlob(packIcon(st.frames[0])).then(function(iconBlob){return[tallBlob,iconBlob]})
   }).then(function(b){
     setProgress(65,"Writing the recipe files 📝");
-    var anim={frametime:FRAMETIME};if(fw!==fh){anim.width=fw;anim.height=fh}anim.frames=[];for(var q=0;q<n;q++)anim.frames.push(q);
+    var anim={frametime:st.fallback};if(fw!==fh){anim.width=fw;anim.height=fh}anim.frames=[];for(var q=0;q<n;q++)anim.frames.push({index:q,time:st.ticks[q]});
     var line2="\u25A0 "+(/tamilcrafters/i.test(disp)?"Animated Totem":disp);
     var mcs=JSON.stringify({pack:{pack_format:PACK_MIN,supported_formats:[PACK_MIN,PACK_MAX],min_format:PACK_MIN,max_format:PACK_MAX,description:"\u00A76\u25A0 by "+BRAND+"\u00A7r\n"+line2}},null,2).replace(/[^\x00-\x7F]/g,function(ch){return"\\u"+("0000"+ch.charCodeAt(0).toString(16)).slice(-4)});
     var iso=new Date().toISOString();
     var credits=["Pack name: "+disp,"Created with the "+TOOL+" by "+BRAND,"(c) 2026 "+BRAND+". All rights reserved. Do not re-upload, redistribute or claim this pack as your own without permission from the creator."];
     if(OFFICIAL_LINK)credits.push("Official link: "+OFFICIAL_LINK);
     var z=new JSZip();
-    z.file("pack.mcmeta",mcs);z.file("assets/minecraft/models/item/totem_of_undying.json",MODEL);z.file("pack.png",b[1]);z.file("CREDITS.txt",credits.join("\r\n")+"\r\n");
+    z.file("pack.mcmeta",mcs);z.file("assets/minecraft/models/item/totem_of_undying.json",makeModel(fw,fh));z.file("pack.png",b[1]);z.file("CREDITS.txt",credits.join("\r\n")+"\r\n");
     z.file("assets/minecraft/tamilcrafters_studio.json",JSON.stringify({made_by:BRAND,tool:TOOL,generated:iso,pack:disp,id:id}));
     z.file("assets/minecraft/textures/item/totem_of_undying.png",b[0]);
     z.file("assets/minecraft/textures/item/totem_of_undying.png.mcmeta",JSON.stringify({animation:anim}));
@@ -377,4 +388,4 @@ $("dl").addEventListener("click",function(){
 })();
 </script>
 </body>
-              </html>
+  </html>
