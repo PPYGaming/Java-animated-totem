@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>Java Animated Totem Pack Maker - TamilCrafters Studio</title>
 <meta name="description" content="Turn any GIF into an animated Totem of Undying resource pack for Minecraft Java Edition. Made by TamilCrafters Studio. Runs 100% in your browser.">
-<meta name="theme-color" content="#06130F">
+<meta name="theme-color" content="#050B2B">
 <link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Ctext y='.9em' font-size='84'%3E%F0%9F%97%BF%3C/text%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -113,6 +113,41 @@ details ol{margin:.2rem 0 .8rem;padding-left:1.2rem;font-weight:600;font-size:.9
 .foot b{color:var(--gold)}
 .snd{position:fixed;top:calc(.7rem + env(safe-area-inset-top,0px));right:.7rem;z-index:80;min-height:44px;min-width:44px;border-radius:50%;border:1.5px solid var(--gb);background:rgba(6,19,15,.7);color:var(--text);font-size:1.1rem;cursor:pointer}
 @media (prefers-reduced-motion:reduce){*{animation-duration:.001ms!important;animation-iteration-count:1!important;transition-duration:.001ms!important}.rise{opacity:1;transform:none}#strip img{opacity:1;transform:none}}
+
+/* ===== vivid refresh: richer colours, glassier panels ===== */
+:root{--bg0:#050B2B;--bg1:#0A2A52;--gold:#FFD93D;--gold2:#FFB300;--amber:#FF7A00;--em:#2CFFB8;--em2:#00C9A0;--vio:#A06BFF;--pink:#FF5FA8;--cyan:#38E1FF;--text:#F7FFFB;--muted:#C6E8DC;--glass:rgba(255,255,255,.10);--gb:rgba(255,255,255,.28);--goldb:rgba(255,222,110,.65)}
+#shade{background:radial-gradient(ellipse 75% 45% at 50% -8%,rgba(255,190,60,.30),transparent 60%),radial-gradient(ellipse 60% 55% at 95% 100%,rgba(160,107,255,.38),transparent 62%),radial-gradient(ellipse 55% 45% at 0% 70%,rgba(255,95,168,.20),transparent 62%),radial-gradient(ellipse 60% 40% at 15% 0%,rgba(56,225,255,.20),transparent 60%),linear-gradient(180deg,rgba(4,12,40,0),rgba(4,12,40,.18) 70%,rgba(4,12,40,.5))}
+h1{background:linear-gradient(135deg,#FFFBE0,#FFE066 35%,#FFB300 70%,#FF7A00);-webkit-background-clip:text;background-clip:text;filter:drop-shadow(0 0 22px rgba(255,190,40,.55)) drop-shadow(0 2px 0 rgba(90,40,0,.45))}
+.hero p{color:#D9F5EA;text-shadow:0 1px 10px rgba(0,20,30,.6)}
+.badge{border-color:var(--em);color:#7CFFD6;background:rgba(44,255,184,.18);box-shadow:3px 3px 0 rgba(0,0,0,.4),0 0 18px rgba(44,255,184,.35)}
+.badge.b2{border-color:var(--gold);color:#FFE57A;background:rgba(255,217,61,.16);box-shadow:3px 3px 0 rgba(0,0,0,.4),0 0 18px rgba(255,200,40,.3)}
+.badge.vio{border-color:#B995FF;color:#E1D2FF;background:rgba(160,107,255,.22);box-shadow:3px 3px 0 rgba(0,0,0,.4),0 0 18px rgba(160,107,255,.45)}
+.float{filter:drop-shadow(0 0 20px rgba(255,217,61,.85)) drop-shadow(0 0 46px rgba(255,122,0,.5)) drop-shadow(0 0 70px rgba(160,107,255,.35))}
+.card{background:linear-gradient(155deg,rgba(60,255,200,.20),rgba(110,90,255,.20) 48%,rgba(255,120,190,.16)),linear-gradient(180deg,rgba(255,255,255,.07),rgba(255,255,255,0));backdrop-filter:blur(22px) saturate(1.9);-webkit-backdrop-filter:blur(22px) saturate(1.9);border:1.5px solid rgba(255,232,150,.7);box-shadow:inset 0 1.5px 0 rgba(255,255,255,.55),inset 0 -1px 0 rgba(255,255,255,.12),inset 0 0 60px rgba(90,255,220,.10),0 0 0 1px rgba(255,255,255,.06),0 0 60px rgba(255,200,60,.25),0 0 110px rgba(160,107,255,.30),0 24px 60px rgba(0,10,40,.5)}
+.card::before{background:var(--gold);box-shadow:0 0 14px 2px rgba(255,217,61,.95)}.card::after{background:var(--em);box-shadow:0 0 14px 2px rgba(44,255,184,.95)}
+.num{background:linear-gradient(135deg,#FFF08A,#FFB300);box-shadow:2px 2px 0 rgba(0,0,0,.45),0 0 14px rgba(255,200,40,.55)}
+.step>label,.step>.lab{text-shadow:0 1px 8px rgba(0,20,40,.5)}
+input[type=text]{background:rgba(255,255,255,.11);border:1.5px solid rgba(255,255,255,.3);box-shadow:inset 0 1px 0 rgba(255,255,255,.25),inset 0 0 20px rgba(80,200,255,.06)}
+input[type=text]::placeholder{color:#B3D9CE;opacity:.85}
+input[type=text]:focus-visible{border-color:var(--gold);box-shadow:0 0 0 3px rgba(255,217,61,.32),0 0 22px rgba(255,217,61,.3)}
+.drop{background:linear-gradient(160deg,rgba(255,255,255,.12),rgba(255,255,255,.05));border:1.8px dashed rgba(255,226,120,.7);box-shadow:inset 0 0 30px rgba(255,200,60,.08)}
+.drop:hover{border-color:#FFF08A;box-shadow:inset 0 0 36px rgba(255,200,60,.16),0 0 22px rgba(255,200,60,.22)}
+.dzi{filter:drop-shadow(0 0 12px rgba(255,200,40,.7))}
+.chip span,.mini,details{background:rgba(255,255,255,.11);border-color:rgba(255,255,255,.3);box-shadow:inset 0 1px 0 rgba(255,255,255,.22)}
+.gen{background:linear-gradient(135deg,#FFF38F,#FFC21A 42%,#FF7A00);box-shadow:0 5px 0 #a64a00,0 12px 32px rgba(255,140,0,.5),inset 0 1.5px 0 rgba(255,255,255,.7)}
+.dl{background:linear-gradient(135deg,#C4FFF0,#2CFFB8 45%,#00B8A9);box-shadow:0 5px 0 #067a66,0 10px 30px rgba(0,230,170,.45),inset 0 1.5px 0 rgba(255,255,255,.7)}
+.dl:disabled{background:linear-gradient(135deg,rgba(255,255,255,.18),rgba(255,255,255,.08));color:#DDF6EE;box-shadow:inset 0 1px 0 rgba(255,255,255,.3);opacity:.7;filter:none}
+@keyframes glow{50%{box-shadow:0 5px 0 #067a66,0 0 52px 8px rgba(44,255,184,.8),inset 0 1.5px 0 rgba(255,255,255,.7)}}
+.bar{background:rgba(0,10,40,.35);border-color:rgba(255,255,255,.3)}
+.fill{background:linear-gradient(90deg,var(--gold),var(--pink),var(--vio),var(--cyan),var(--em));box-shadow:0 0 16px rgba(255,120,200,.7)}
+#ptext{color:#E0F7EE}
+.msg.error{background:rgba(255,70,110,.22);border-color:rgba(255,120,150,.8);color:#FFE0E6}
+.msg.warn{background:rgba(255,200,40,.18);border-color:rgba(255,220,110,.75);color:#FFF0B8}
+#strip img{border-color:rgba(255,255,255,.4);background:rgba(0,10,40,.35)}
+.ok{text-shadow:0 0 18px rgba(255,217,61,.8)}
+.note,.foot{color:#CDEBDF}.foot b{color:#FFE066}
+details ol{color:#D4F0E5}
+.snd{background:rgba(10,30,70,.55)}
 </style>
 </head>
 <body>
@@ -197,18 +232,18 @@ function paintScene(){
   var W=176,H=Math.max(220,Math.round(W*innerHeight/innerWidth*1.1)),R=rng(7),c,x,y,i;
   ["sky","hills","trees"].forEach(function(id){$(id).width=W;$(id).height=H});
   c=$("sky").getContext("2d");
-  var g=c.createLinearGradient(0,0,0,H*.72);g.addColorStop(0,"#030c0a");g.addColorStop(.6,"#0a2a27");g.addColorStop(1,"#1d5a4c");c.fillStyle=g;c.fillRect(0,0,W,H);
+  var g=c.createLinearGradient(0,0,0,H*.72);g.addColorStop(0,"#0a0a3a");g.addColorStop(.45,"#0b4a6e");g.addColorStop(.8,"#13b59a");g.addColorStop(1,"#5CF2B4");c.fillStyle=g;c.fillRect(0,0,W,H);
   for(i=0;i<110;i++){c.fillStyle="rgba(255,255,230,"+(.25+R()*.75)+")";c.fillRect(Math.floor(R()*W),Math.floor(R()*H*.55),1,1)}
   var mx=Math.floor(W*.74),my=Math.floor(H*.14);
   c.fillStyle="rgba(255,240,170,.08)";for(var r=20;r>10;r-=3){c.beginPath();c.arc(mx,my,r,0,7);c.fill()}
   for(y=-9;y<=9;y++)for(x=-9;x<=9;x++)if(x*x+y*y<=81){c.fillStyle=(x*x+y*y>60)?"#E9DFA6":"#FFF6C8";c.fillRect(mx+x,my+y,1,1)}
   c.fillStyle="#D2C586";[[-3,-3,2],[3,2,2],[-2,4,1],[4,-4,1]].forEach(function(k){c.fillRect(mx+k[0],my+k[1],k[2],k[2])});
   c=$("hills").getContext("2d");
-  for(x=0;x<W;x++){c.fillStyle="#0c332c";c.fillRect(x,ridge(x,H*.58,7,1),1,H);c.fillStyle="#08241f";c.fillRect(x,ridge(x,H*.68,6,4),1,H)}
+  for(x=0;x<W;x++){c.fillStyle="#0f6b52";c.fillRect(x,ridge(x,H*.58,7,1),1,H);c.fillStyle="#0a4a43";c.fillRect(x,ridge(x,H*.68,6,4),1,H)}
   c=$("trees").getContext("2d");
-  for(x=0;x<W;x++){c.fillStyle="#051813";c.fillRect(x,ridge(x,H*.8,3,2),1,H)}
+  for(x=0;x<W;x++){c.fillStyle="#073a2e";c.fillRect(x,ridge(x,H*.8,3,2),1,H)}
   for(x=3;x<W;x+=6+Math.floor(R()*9)){
-    var by=ridge(x,H*.8,3,2)+1,h=9+Math.floor(R()*16);c.fillStyle=R()<.8?"#03100c":"#04150f";
+    var by=ridge(x,H*.8,3,2)+1,h=9+Math.floor(R()*16);c.fillStyle=R()<.8?"#04241c":"#052a20";
     if(R()<.7){c.fillRect(x,by-2,1,2);for(i=0;i<h;i++){var w=1+Math.floor(i*.45);c.fillRect(x-Math.floor(w/2),by-h+i,w,1)}}
     else{c.fillRect(x,by-h*.6,2,h*.6);c.fillRect(x-3,by-h-2,8,5);c.fillRect(x-2,by-h-4,6,2)}
   }
@@ -231,6 +266,34 @@ var PAL={k:"#3a2606",g:"#FFD23F",d:"#C98A12",w:"#FFF6C8",e:"#22E3A6"};
 function drawTotem(cv){var c=cv.getContext("2d");c.clearRect(0,0,16,16);TOTEM.forEach(function(r,y){for(var x=0;x<16;x++){var ch=r[x];if(PAL[ch]){c.fillStyle=PAL[ch];c.fillRect(x,y,1,1)}}})}
 drawTotem($("hero"));drawTotem($("miniTotem"));
 
+/* ===== premium tap / click burst (sparks, sparkles, ring). Own canvas, never blocks clicks ===== */
+var TCB=(function(){
+  var cv=document.createElement("canvas");cv.setAttribute("aria-hidden","true");cv.style.cssText="position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:65";document.body.appendChild(cv);
+  var ctx=cv.getContext("2d"),dpr=Math.min(devicePixelRatio||1,2),W=0,H=0,parts=[],running=false,last=0,MAX=170;
+  var COLORS=["#fff3c4","#ffd54a","#ffffff","#5CFFD0","#ff8fd0","#a98bff","#ffb36b"];
+  function size(){W=innerWidth;H=innerHeight;cv.width=W*dpr;cv.height=H*dpr;ctx.setTransform(dpr,0,0,dpr,0,0)}size();addEventListener("resize",size);
+  function burst(x,y,n){
+    n=n?Math.max(20,Math.min(44,Math.round(n*1.2))):32;
+    for(var i=0;i<n;i++){var a=Math.random()*6.2832,sp=90+Math.random()*270;if(parts.length>=MAX)parts.shift();
+      parts.push({x:x,y:y,vx:Math.cos(a)*sp,vy:Math.sin(a)*sp-40,life:0,max:.55+Math.random()*.6,r:2.2+Math.random()*3.6,c:COLORS[Math.random()*COLORS.length|0],star:Math.random()<.35,rot:Math.random()*6})}
+    parts.push({ring:true,x:x,y:y,life:0,max:.45});
+    if(!running){running=true;last=performance.now();requestAnimationFrame(tick)}
+  }
+  function step(dt){
+    ctx.clearRect(0,0,W,H);ctx.globalCompositeOperation="lighter";
+    for(var i=parts.length-1;i>=0;i--){var p=parts[i];p.life+=dt;if(p.life>=p.max){parts.splice(i,1);continue}
+      var t=p.life/p.max;
+      if(p.ring){ctx.globalAlpha=(1-t)*.7;ctx.strokeStyle="#ffe9a8";ctx.lineWidth=2.5*(1-t)+.5;ctx.beginPath();ctx.arc(p.x,p.y,8+t*46,0,6.2832);ctx.stroke();continue}
+      p.vx*=1-2.2*dt;p.vy=p.vy*(1-2.2*dt)+380*dt;p.x+=p.vx*dt;p.y+=p.vy*dt;
+      ctx.globalAlpha=1-t*t;ctx.fillStyle=p.c;var r=p.r*(1-.5*t);
+      if(p.star){ctx.save();ctx.translate(p.x,p.y);ctx.rotate(p.rot+p.life*6);ctx.beginPath();ctx.moveTo(0,-r*2);ctx.lineTo(r*.6,-r*.6);ctx.lineTo(r*2,0);ctx.lineTo(r*.6,r*.6);ctx.lineTo(0,r*2);ctx.lineTo(-r*.6,r*.6);ctx.lineTo(-r*2,0);ctx.lineTo(-r*.6,-r*.6);ctx.closePath();ctx.fill();ctx.restore()}
+      else{ctx.beginPath();ctx.arc(p.x,p.y,r,0,6.2832);ctx.fill()}}
+    ctx.globalAlpha=1;ctx.globalCompositeOperation="source-over";
+  }
+  function tick(now){var dt=Math.min((now-last)/1000,.05);last=now;step(dt);if(parts.length)requestAnimationFrame(tick);else{running=false;ctx.clearRect(0,0,W,H)}}
+  window.__tcbDemo=function(x,y,ms){burst(x,y);for(var t=0;t<ms;t+=16)step(.016)};
+  return burst;
+})();
 /* ===== FX engine: embers, tap bursts, confetti ===== */
 var FX=(function(){
   var cv=$("fx"),c=cv.getContext("2d"),P=[],MAX=160,DPR=Math.min(devicePixelRatio||1,2),raf=0,last=0,lastE=0;
@@ -238,7 +301,7 @@ var FX=(function(){
   function size(){cv.width=innerWidth*DPR;cv.height=innerHeight*DPR;c.setTransform(DPR,0,0,DPR,0,0)}size();addEventListener("resize",size);
   function add(x,y,o){if(P.length>=MAX)P.shift();var a=o.a!=null?o.a:Math.random()*6.283,s=o.s!=null?o.s:1+Math.random()*3;
     P.push({x:x,y:y,vx:Math.cos(a)*s,vy:Math.sin(a)*s,sz:o.sz||2+Math.random()*3,col:o.col||COL[Math.random()*COL.length|0],l:0,ml:o.ml||500+Math.random()*400,g:o.g!=null?o.g:.05,dr:o.dr||.985,rect:o.rect,rot:Math.random()*6})}
-  function burst(x,y,n){if(RM)return;n=n||14+(Math.random()*5|0);for(var i=0;i<n;i++)add(x,y,{s:1.5+Math.random()*3.5,g:.09,ml:550+Math.random()*350,col:BC[Math.random()*BC.length|0]})}
+  function burst(x,y,n){if(RM)return;TCB(x,y,n)}
   function confetti(){if(RM)return;var cx=innerWidth/2,cy=innerHeight*.4;for(var i=0;i<70;i++)add(cx,cy,{s:3+Math.random()*7,a:-Math.PI/2+(Math.random()-.5)*2.6,g:.14,dr:.975,ml:1400+Math.random()*900,sz:4+Math.random()*4,rect:1,col:Math.random()<.5?"#22E3A6":(Math.random()<.5?"#FFD23F":"#9CFFA0")})}
   function frame(ts){raf=requestAnimationFrame(frame);var dt=Math.min(ts-(last||ts),50);last=ts;c.clearRect(0,0,innerWidth,innerHeight);
     if(!RM&&ts-lastE>260&&P.length<MAX-40){lastE=ts;add(Math.random()*innerWidth,innerHeight+10,{a:-Math.PI/2+(Math.random()-.5)*.6,s:.4+Math.random()*.8,g:-.006,dr:.995,ml:3200+Math.random()*2200,sz:1.5+Math.random()*2,col:Math.random()<.65?"#FFD23F":"#22E3A6"})}
