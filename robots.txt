@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://java-animated-totem.tamilcraftersstudio.in/sitemap.xml
